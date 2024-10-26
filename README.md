@@ -171,6 +171,10 @@ Result: The number is 4.0
 
 Note: Make sure to convert the `<number>` parameter to an integer when solving this deliverable!
 
-3. Create a `flatburger()` view. The route for this view should be of the format `/flatburger_page`. The view should return the `flatburger_html_code` variable which contains a `string` containing `HTML` code.
+3. Create a `flatburger()` view. The route for this view should be of the format `/flatburger_page`. The view should return the `flatburger_html_code` variable.
 
-4. Create a `get_burgers()` view. The route for this view should be of the format `/burgers`. The view should return the `burgers` variable which contains a `list` that contains five `dictionaries` that each have three key and value pairs (`name`, `image`, and `description`) that pertain to information about burgers.
+Note: The value of the `flatburger_html_code` variable is a `string` containing `HTML` code.
+
+4. Create a `get_burgers()` view. The route for this view should be of the format `/burgers`. The view should return the `burgers` variable.
+
+Note: The value of the `burgers` variable is a `list` that contains five `dictionaries` that each have three key and value pairs (`name`, `image`, and `description`) that pertain to information about burgers.
