@@ -9,7 +9,7 @@
 
 |No. | Lecture                          | Starter 	| Example Code 	| Solution 	|
 |----|------------------------------	|:-----:	|--------	|---------	|
-|1 | Intro to Flask                             |[01_starter](https://github.com/RikkuX491/SE-NYC-082624-Phase-4/tree/01_starter)|||
+|1 | Intro to Flask                             |[01_starter](https://github.com/RikkuX491/SE-NYC-082624-Phase-4/tree/01_starter)|[01_example_code](https://github.com/RikkuX491/SE-NYC-082624-Phase-4/tree/01_example_code)||
 |2 | Flask-SQLAlchemy                           ||||
 |3 | Modeling Relationships in Flask-SQLAlchemy ||||
 |4 | Retrieving Data from APIs & Building APIs  ||||
