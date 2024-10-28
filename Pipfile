@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 flask = "2.2.2"
 ipdb = "0.13.9"
+flask-cors = "3.0.10"
 
 [requires]
 python_full_version = "3.8.13"
