@@ -9,7 +9,7 @@ from flask import Flask, make_response
 from flask_migrate import Migrate
 
 # db is a variable containing an instance of the SQLAlchemy class (Flask SQLAlchemy extension)
-from models import db, Hotel, Customer
+from models import db, Hotel
 
 app = Flask(__name__)
 
