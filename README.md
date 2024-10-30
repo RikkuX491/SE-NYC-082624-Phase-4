@@ -60,7 +60,7 @@ Hint: A `Column` object can be created by creating an instance of the `db.Column
    - A class variable named `reviews` that has the value returned from the `db.relationship()` method. The first argument of `db.relationship()` should be `'Review'`. The `back_populates` argument should have the value `'customer'` which will be the variable that was created in the `Review` model which references the other side of the 1-to-Many relationship. Include a `cascade` argument that has the value of `'all'` in `db.relationship()` so that deleting a `Customer` instance will result in deleting its associated `Review` instances.
    - A class variable named `hotels` that has the value of an AssociationProxy object returned from the `association_proxy()` function that allows you to get a customer's associated `Hotel` instances.
 
-Write your code in the `app.py` file in the `server` directory for these next two deliverables:
+Write your code in the `app.py` file in the `server` directory for these next three deliverables:
 
 5. Modify the code in the `get_hotels()` view (`/hotels` route) so that `hotel.to_dict()` serializes only the `id` and `name` columns.
 
