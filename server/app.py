@@ -22,6 +22,7 @@ db.init_app(app)
 
 @app.route('/hotels')
 def get_hotels():
+    # Deliverable # 5 solution code
     response_body = [hotel.to_dict(rules=('-reviews',)) for hotel in Hotel.query.all()]
     return make_response(response_body, 200)
 
@@ -30,13 +31,9 @@ def hotel_by_id(id):
     hotel = db.session.get(Hotel, id)
 
     if hotel:
+        # Deliverable # 6 solution code
         response_body = hotel.to_dict(rules=('-reviews.hotel', '-reviews.customer'))
-        # response_body = hotel.to_dict(rules=('-reviews.hotel', '-reviews.customer.reviews'))
-        
-        # unique_customers = list(set([review.customer for review in hotel.reviews]))
-        # response_body['customers'] = [customer.to_dict(rules=('-reviews',)) for customer in unique_customers]
         response_body['customers'] = [customer.to_dict(rules=('-reviews',)) for customer in set(hotel.customers)]
-        
         return make_response(response_body, 200)
     else:
         response_body = {
