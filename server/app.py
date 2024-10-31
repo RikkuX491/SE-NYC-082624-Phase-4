@@ -20,27 +20,116 @@ migrate = Migrate(app, db)
 # initialize the Flask application to use the database
 db.init_app(app)
 
-@app.route('/hotels')
+@app.route('/hotels', methods=["GET", "POST"])
 def all_hotels():
-    # This code should only be executed if the request method is "GET"
-    hotels = Hotel.query.all()
-    response_body = [hotel.to_dict(only=('id', 'name')) for hotel in hotels]
-    return make_response(response_body, 200)
+    if request.method == 'GET':
+        # This code should only be executed if the request method is "GET"
+        hotels = Hotel.query.all()
+        response_body = [hotel.to_dict(only=('id', 'name')) for hotel in hotels]
+        return make_response(response_body, 200)
+    
+    elif request.method == 'POST':
+        hotel_name = request.json.get('name')
+        new_hotel = Hotel(name=hotel_name)
+        db.session.add(new_hotel)
+        db.session.commit()
+        response_body = new_hotel.to_dict(rules=('-reviews',))
+        return make_response(response_body, 201)
+    
+# @app.get('/hotels')
+# def get_hotels():
+#     hotels = Hotel.query.all()
+#     response_body = [hotel.to_dict(only=('id', 'name')) for hotel in hotels]
+#     return make_response(response_body, 200)
 
-@app.route('/hotels/<int:id>')
+# @app.post('/hotels')
+# def post_hotels():
+#     hotel_name = request.json.get('name')
+#     new_hotel = Hotel(name=hotel_name)
+#     db.session.add(new_hotel)
+#     db.session.commit()
+#     response_body = new_hotel.to_dict(rules=('-reviews',))
+#     return make_response(response_body, 201)
+
+@app.route('/hotels/<int:id>', methods=["GET", "PATCH", "DELETE"])
 def hotel_by_id(id):
     hotel = db.session.get(Hotel, id)
 
     if hotel:
-        # This code should only be executed if the request method is "GET"
-        response_body = hotel.to_dict(rules=('-reviews.hotel', '-reviews.customer'))
-        response_body['customers'] = [customer.to_dict(only=('id', 'first_name', 'last_name')) for customer in hotel.customers]
-        return make_response(response_body, 200)
+        if request.method == "GET":
+            # This code should only be executed if the request method is "GET"
+            response_body = hotel.to_dict(rules=('-reviews.hotel', '-reviews.customer'))
+            response_body['customers'] = [customer.to_dict(only=('id', 'first_name', 'last_name')) for customer in hotel.customers]
+            return make_response(response_body, 200)
+        
+        elif request.method == 'PATCH':
+            for attr in request.json:
+                setattr(hotel, attr, request.json.get(attr))
+            
+            # if request.json.get('name') != None:
+            #     hotel.name = request.json.get('name')
+
+            db.session.commit()
+            response_body = hotel.to_dict(rules=('-reviews',))
+            return make_response(response_body, 200)
+        
+        elif request.method == 'DELETE':
+            # for review in hotel.reviews:
+            #     db.session.delete(review)
+            db.session.delete(hotel)
+            db.session.commit()
+            return make_response({}, 204)
+
     else:
         response_body = {
             "error": "Hotel Not Found"
         }
         return make_response(response_body, 404)
+    
+# @app.get('/hotels/<int:id>')
+# def get_hotel(id):
+#     hotel = db.session.get(Hotel, id)
+
+#     if hotel:
+#         response_body = hotel.to_dict(rules=('-reviews.hotel', '-reviews.customer'))
+#         response_body['customers'] = [customer.to_dict(only=('id', 'first_name', 'last_name')) for customer in hotel.customers]
+#         return make_response(response_body, 200)
+#     else:
+#         response_body = {
+#             "error": "Hotel Not Found"
+#         }
+#         return make_response(response_body, 404)
+
+# @app.patch('/hotels/<int:id>')
+# def patch_hotel(id):
+#     hotel = db.session.get(Hotel, id)
+
+#     if hotel:
+#         for attr in request.json:
+#             setattr(hotel, attr, request.json.get(attr))
+
+#         db.session.commit()
+#         response_body = hotel.to_dict(rules=('-reviews',))
+#         return make_response(response_body, 200)
+#     else:
+#         response_body = {
+#             "error": "Hotel Not Found"
+#         }
+#         return make_response(response_body, 404)
+
+# @app.delete('/hotels/<int:id>')
+# def delete_hotel(id):
+#     hotel = db.session.get(Hotel, id)
+
+#     if hotel:
+#         db.session.delete(hotel)
+#         db.session.commit()
+#         return make_response({}, 204)
+#     else:
+#         response_body = {
+#             "error": "Hotel Not Found"
+#         }
+#         return make_response(response_body, 404)
 
 @app.route('/customers')
 def all_customers():
