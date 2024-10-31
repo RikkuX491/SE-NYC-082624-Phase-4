@@ -7,7 +7,7 @@ from flask import Flask, make_response, request
 # Migrate is a class from the flask_migrate library that creates a Migrate object that can be used to connect Flask-Migrate to your Flask app and database
 from flask_migrate import Migrate
 
-# Api and Resource are classes from the flask_resful library. The Api class can be used to create an Api instance which can be used to connect a class inheriting from the Resource class to a route
+# Api and Resource are classes from the flask_restful library. The Api class can be used to create an Api instance which can be used to connect a class inheriting from the Resource class to a route
 from flask_restful import Api, Resource
 
 # db is a variable containing an instance of the SQLAlchemy class (Flask SQLAlchemy extension). Hotel, Customer, and Review are models that are imported from the models.py file
