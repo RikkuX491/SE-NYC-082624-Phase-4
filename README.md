@@ -75,14 +75,14 @@ python seed.py
 
 Write your code in the `app.py` file in the `server` directory for these next six deliverables:
 
-8. Modify the code in the `post` method in the `AllHotels` Resource class (`/hotels` route) so that the exceptions are caught when new hotels are not valid using `try` and `except` blocks.
+8. Modify the code in the `post` method in the `AllHotels` Resource class (`/hotels` route) so that the exceptions are caught when new hotels are not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Hotel names cannot be null, must be unique, and must be strings that are between 5 and 50 characters long!"`
 
-9. Modify the code in the `patch` method in the `HotelByID` Resource class (`/hotels/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks.
+9. Modify the code in the `patch` method in the `HotelByID` Resource class (`/hotels/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Hotel names cannot be null, must be unique, and must be strings that are between 5 and 50 characters long!"`
 
-10. Modify the code in the `post` method in the `AllCustomers` Resource class (`/customers` route) so that the exceptions are caught when new customers are not valid using `try` and `except` blocks.
+10. Modify the code in the `post` method in the `AllCustomers` Resource class (`/customers` route) so that the exceptions are caught when new customers are not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Customer first names and last names cannot be null, must be between 3 and 15 characters long, and the first name cannot be the same as the last name!"`
 
-11. Modify the code in the `patch` method in the `CustomerByID` Resource class (`/customers/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks.
+11. Modify the code in the `patch` method in the `CustomerByID` Resource class (`/customers/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Customer first names and last names cannot be null, must be between 3 and 15 characters long, and the first name cannot be the same as the last name!"`
 
-12. Modify the code in the `post` method in the `AllReviews` Resource class (`/reviews` route) so that the exceptions are caught when new reviews are not valid using `try` and `except` blocks.
+12. Modify the code in the `post` method in the `AllReviews` Resource class (`/reviews` route) so that the exceptions are caught when new reviews are not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Invalid Review data provided!"`
 
-13. Modify the code in the `patch` method in the `ReviewByID` Resource class (`/reviews/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks.
+13. Modify the code in the `patch` method in the `ReviewByID` Resource class (`/reviews/<int:id>` route) so that the exceptions are caught when the updated data is not valid using `try` and `except` blocks. The response body should be a `dictionary` with the key of `"error"` and value of `"Invalid Review data provided!"`
