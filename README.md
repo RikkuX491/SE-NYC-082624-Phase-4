@@ -37,7 +37,7 @@ Write your code in the `models.py` file in the `server` directory for these firs
    - A `nullable` constraint to the `name` column. The value of the `nullable` constraint should be `False`, so that hotel names cannot have a `NULL` value.
 
 2. Add the following validation in the `Hotel` model:
-   - Must have a `name` that is a `string` between `5` and `20` characters long. Raises an `Exception` if the `name` is not valid.
+   - Must have a `name` that is a `string` between `5` and `50` characters long. Raises an `Exception` if the `name` is not valid.
 
 3. Add the following constraints to columns in the `Customer` model:
    - A `nullable` constraint to the `first_name` column. The value of the `nullable` constraint should be `False`, so that customer first names cannot have a `NULL` value.
@@ -59,8 +59,8 @@ Write your code in the `models.py` file in the `server` directory for these firs
 7. Add the following validations in the `Review` model:
    - Must have a `rating` that is an `integer` between `1` and `5`. Raises an `Exception` if the `rating` is not valid.
    - Must have a `text` that is a `string` between `3` and `100` characters long. Raises an `Exception` if the `text` is not valid.
-   - Must have a `hotel_id` that is an `integer`. Raises an `TypeError` if the `rating` is not valid.
-   - Must have a `hotel_id` that is an `integer`. Raises an `TypeError` if the `rating` is not valid.
+   - Must have a `hotel_id` that is an `integer`. Raises an `TypeError` if the `hotel_id` is not valid.
+   - Must have a `customer_id` that is an `integer`. Raises an `TypeError` if the `customer_id` is not valid.
 
 Open a new terminal and run the following commands in the terminal to enter the virtual environment, change into the server folder, create the `migrations` folder, create a new revision file in the `versions` folder in `migrations`, execute the code within the `upgrade()` function in the revision file, and seed the database:
 
