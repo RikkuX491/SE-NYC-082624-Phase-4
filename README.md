@@ -37,7 +37,7 @@ Write your code in the `models.py` file in the `server` directory for these firs
    - A `nullable` constraint to the `name` column. The value of the `nullable` constraint should be `False`, so that hotel names cannot have a `NULL` value.
 
 2. Add the following validation in the `Hotel` model:
-   - Must have a `name` that is a `string` between `5` and `20` characters long. Raises an `Exception` if the `name` is not valid.
+   - Must have a `name` that is a `string` between `5` and `50` characters long. Raises an `Exception` if the `name` is not valid.
 
 3. Add the following constraints to columns in the `Customer` model:
    - A `nullable` constraint to the `first_name` column. The value of the `nullable` constraint should be `False`, so that customer first names cannot have a `NULL` value.
