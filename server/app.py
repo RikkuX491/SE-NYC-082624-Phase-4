@@ -39,6 +39,8 @@ class AllHotels(Resource):
     
     def post(self):
         hotel_name = request.json.get('name')
+
+        # Deliverable # 8 solution code
         try:
             new_hotel = Hotel(name=hotel_name)
             db.session.add(new_hotel)
@@ -75,6 +77,7 @@ class HotelByID(Resource):
         hotel = db.session.get(Hotel, id)
 
         if hotel:
+            # Deliverable # 9 solution code
             try:
                 for attr in request.json:
                     setattr(hotel, attr, request.json.get(attr))
@@ -118,6 +121,8 @@ class AllCustomers(Resource):
     def post(self):
         customer_first_name = request.json.get('first_name')
         customer_last_name = request.json.get('last_name')
+
+        # Deliverable # 10 solution code
         try:
             new_customer = Customer(first_name=customer_first_name, last_name=customer_last_name)
             db.session.add(new_customer)
@@ -154,6 +159,7 @@ class CustomerByID(Resource):
         customer = db.session.get(Customer, id)
 
         if customer:
+            # Deliverable # 11 solution code
             try:
                 for attr in request.json:
                     setattr(customer, attr, request.json.get(attr))
@@ -199,6 +205,8 @@ class AllReviews(Resource):
         review_text = request.json.get('text')
         review_hotel_id = request.json.get('hotel_id')
         review_customer_id = request.json.get('customer_id')
+
+        # Deliverable # 12 solution code
         try:
             new_review = Review(rating=review_rating, text=review_text, hotel_id=review_hotel_id, customer_id=review_customer_id)
             db.session.add(new_review)
@@ -231,6 +239,7 @@ class ReviewByID(Resource):
         review = db.session.get(Review, id)
 
         if review:
+            # Deliverable # 13 solution code
             try:
                 for attr in request.json:
                     setattr(review, attr, request.json.get(attr))

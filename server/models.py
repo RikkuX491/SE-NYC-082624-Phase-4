@@ -17,8 +17,11 @@ class Hotel(db.Model, SerializerMixin):
     __tablename__ = 'hotels'
 
     id = db.Column(db.Integer, primary_key=True)
+
+    # Deliverable # 1 solution code
     name = db.Column(db.String, unique=True, nullable=False)
 
+    # Deliverable # 2 solution code
     @validates('name')
     def validate_name(self, column, value):
         if type(value) == str and 5 <= len(value) <= 50:
@@ -36,24 +39,21 @@ class Customer(db.Model, SerializerMixin):
     __tablename__ = 'customers'
 
     id = db.Column(db.Integer, primary_key=True)
+
+    # Deliverable # 3 solution code
     first_name = db.Column(db.String, nullable=False)
     last_name = db.Column(db.String, nullable=False)
 
+    # Deliverable # 4 solution code
     __table_args__ = (db.CheckConstraint('first_name != last_name'),)
 
+    # Deliverable # 5 solution code
     @validates('first_name', 'last_name')
     def validate_customer_columns(self, column, value):
         if type(value) == str and 3 <= len(value) <= 15:
             return value
         else:
             raise Exception(f"{column} must be a string that is between 3 and 15 characters long!")
-        
-    # @validates('last_name')
-    # def validate_last_name(self, column, value):
-    #     if type(value) == str and 3 <= len(value) <= 15:
-    #         return value
-    #     else:
-    #         raise Exception(f"{column} must be a string that is between 3 and 15 characters long!")
 
     # 1 customer has many reviews: 1-to-many relationship between customers and reviews tables
     reviews = db.relationship('Review', back_populates='customer', cascade='all')
@@ -65,9 +65,10 @@ class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
+
+    # Deliverable # 6 solution code
     rating = db.Column(db.Integer, nullable=False)
     text = db.Column(db.String, nullable=False)
-
     hotel_id = db.Column(db.Integer, db.ForeignKey('hotels.id'), nullable=False)
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
 
@@ -77,19 +78,22 @@ class Review(db.Model, SerializerMixin):
     # A review belongs to a customer: 1-to-many relationship between customers and reviews tables
     customer = db.relationship('Customer', back_populates='reviews')
 
+    # Deliverable # 7 solution code
     @validates('rating')
     def validate_rating(self, column, value):
         if type(value) == int and 1 <= value <= 5:
             return value
         raise Exception(f"{column} must be an integer between 1 and 5!")
     
+    # Deliverable # 7 solution code
     @validates('text')
     def validate_text(self, column, value):
         if type(value) == str and 3 <= len(value) <= 100:
             return value
         else:
             raise Exception(f"{column} must be a string that is between 3 and 100 characters long!")
-        
+    
+    # Deliverable # 7 solution code
     @validates('hotel_id', 'customer_id')
     def validate_foreign_key_columns(self, column, value):
         if type(value) == int:
