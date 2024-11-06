@@ -10,13 +10,14 @@ from models import db, Hotel, Customer, Review
 
 app = Flask(__name__)
 
+# Enable CORS (Cross-Origin Resource Sharing) for our Flask app
+# CORS(app)
+
 # configure a database connection to the local file examples.db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotels.db'
 
 # disable modification tracking to use less memory
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# CORS(app)
 
 # create a Migrate object to manage schema modifications
 migrate = Migrate(app, db)
