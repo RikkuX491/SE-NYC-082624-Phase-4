@@ -19,17 +19,13 @@ function HotelProfile(){
     useEffect(getHotel, [])
 
     function getHotel(){
-        // GET request - Write the code to make a GET request to `/hotels/${id}` (use string interpolation since the value of the id variable should be incorporated into the string). You should retrieve a hotel by id and update the 'hotel' state with the hotel data.
+        // Deliverable # 6 solution code
         fetch(`/hotels/${id}`)
         .then(response => {
             if(response.ok){
                 response.json().then(hotelData => {
                     setHotel(hotelData)
-                    setFormData({name: hotelData.name, image: hotelData.image})
                 })
-            }
-            else{
-                response.json().then(errorData => alert(`Error: ${errorData.error}`))
             }
         })
     }
