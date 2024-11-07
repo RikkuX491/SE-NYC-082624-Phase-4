@@ -13,8 +13,15 @@ function HotelProfile(){
     // id - contains a number that refers to the id for the hotel that should be retrieved via fetch() (GET request) in the callback function in useEffect().
     const {id} = useParams()
 
-    const {deleteHotel, updateHotel} = useOutletContext()
+    const {deleteHotel, updateHotel, customer} = useOutletContext()
+    
     const navigate = useNavigate()
+
+    // useEffect(() => {
+    //     if(!customer){
+    //         navigate('/login')
+    //     }
+    // }, [customer])
 
     useEffect(() => {
         // GET request - Retrieve a hotel by id and update the 'hotel' state with the hotel data.

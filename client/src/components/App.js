@@ -8,12 +8,30 @@ function App(){
     const navigate = useNavigate()
 
     const [hotels, setHotels] = useState([])
+    const [customer, setCustomer] = useState(null)
 
     useEffect(() => {
         // GET request - Retrieve all hotels and update the 'hotels' state with the hotel data.
         fetch('/hotels')
         .then(response => response.json())
         .then(hotelsData => setHotels(hotelsData))
+    }, [])
+
+    useEffect(() => {
+        fetch('/check_session')
+        .then(response => {
+            if(response.ok){
+                response.json().then(customerData => {
+                    setCustomer(customerData)
+                    if(window.location.pathname == '/login'){
+                        navigate('/')
+                    }
+                })
+            }
+            else{
+                navigate('/login')
+            }
+        })
     }, [])
 
     function addHotel(newHotel){
@@ -96,11 +114,60 @@ function App(){
         })
     }
 
+    function login(loginData){
+        // console.log(loginData)
+        
+        fetch('/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(response => {
+            if(response.ok){
+                response.json().then(customerData => {
+                    setCustomer(customerData)
+                    navigate('/')
+                })
+            }
+            else{
+                response.json().then(errorData => alert(`Error: ${errorData.error}`))
+            }
+        })
+    }
+
+    function logout(){
+        fetch('/logout', {
+            method: "DELETE"
+        })
+        .then(() => {
+            setCustomer(null)
+        })
+    }
+
     return (
       <div className="app">
-        <NavBar/>
+        <NavBar customer={customer} logout={logout}/>
         <Header/>
-        <Outlet context={{hotels: hotels, addHotel: addHotel, deleteHotel: deleteHotel, updateHotel: updateHotel}}/>
+        {
+            customer
+            ?
+            <h1>Welcome {customer.first_name} {customer.last_name}!</h1>
+            :
+            null
+        }
+        <Outlet context={
+            {
+                hotels: hotels,
+                addHotel: addHotel,
+                deleteHotel: deleteHotel,
+                updateHotel: updateHotel,
+                customer: customer,
+                login: login
+            }
+        }/>
       </div>
     );
 }

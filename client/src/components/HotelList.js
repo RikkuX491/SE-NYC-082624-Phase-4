@@ -1,9 +1,18 @@
 import Hotel from './Hotel';
-import { useOutletContext } from "react-router-dom";
+// import { useEffect } from 'react';
+import { useOutletContext, useNavigate } from "react-router-dom";
 
 function HotelList(){
 
-    const {hotels} = useOutletContext()
+    const {hotels, customer} = useOutletContext()
+
+    const navigate = useNavigate()
+
+    // useEffect(() => {
+    //     if(!customer){
+    //         navigate('/login')
+    //     }
+    // }, [customer])
 
     const hotelComponents = hotels.map(hotel => {
         return <Hotel key={hotel.id} hotel={hotel}/>

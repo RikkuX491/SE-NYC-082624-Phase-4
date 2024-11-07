@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { useOutletContext} from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
+// import { useEffect } from "react";
 
 function NewHotelForm() {
 
-  const {addHotel} = useOutletContext()
+  const {addHotel, customer} = useOutletContext()
 
+  const navigate = useNavigate()
+
+  // useEffect(() => {
+  //     if(!customer){
+  //         navigate('/login')
+  //     }
+  // }, [customer])
 
   const [formData, setFormData] = useState({
     name: "",
