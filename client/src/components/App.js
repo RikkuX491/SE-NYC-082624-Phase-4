@@ -1,6 +1,6 @@
 import Header from "./Header";
 import { useState, useEffect } from "react";
-import { json, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 
 function App(){
