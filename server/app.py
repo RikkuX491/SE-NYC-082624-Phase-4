@@ -41,17 +41,26 @@ class AllHotels(Resource):
         return make_response(response_body, 200)
     
     def post(self):
-        try:
-            new_hotel = Hotel(name=request.json.get('name'), image=request.json.get('image'))
-            db.session.add(new_hotel)
-            db.session.commit()
-            response_body = new_hotel.to_dict(only=('id', 'name', 'image'))
-            return make_response(response_body, 201)
-        except:
+        user_id_data = session.get('user_id')
+        user = User.query.filter_by(id=user_id_data).first()
+
+        if(user and user.type == 'admin'):
+            try:
+                new_hotel = Hotel(name=request.json.get('name'), image=request.json.get('image'))
+                db.session.add(new_hotel)
+                db.session.commit()
+                response_body = new_hotel.to_dict(only=('id', 'name', 'image'))
+                return make_response(response_body, 201)
+            except:
+                response_body = {
+                    "error": "Hotel must have a name and image, and the hotel name cannot be the same name as any other hotel!"
+                }
+                return make_response(response_body, 400)
+        else:
             response_body = {
-                "error": "Hotel must have a name and image, and the hotel name cannot be the same name as any other hotel!"
+                "error": "Only admins can add new hotels!"
             }
-            return make_response(response_body, 400)
+            return make_response(response_body, 401)
     
 api.add_resource(AllHotels, '/hotels')
 
@@ -75,43 +84,61 @@ class HotelByID(Resource):
             return make_response(response_body, 404)
         
     def patch(self, id):
+            user_id_data = session.get('user_id')
+            user = User.query.filter_by(id=user_id_data).first()
+
+            if(user and user.type == 'admin'):
+                hotel = db.session.get(Hotel, id)
+
+                if hotel:
+                    try:
+                        for attr in request.json:
+                            setattr(hotel, attr, request.json[attr])
+                        
+                        db.session.commit()    
+                        response_body = hotel.to_dict(only=('id', 'name', 'image'))
+                        return make_response(response_body, 200)
+                    
+                    except:
+                        response_body = {
+                            "error": "Hotel must have a name and image, and the hotel name cannot be the same name as any other hotel!"
+                        }
+                        return make_response(response_body, 400)
+
+                else:
+                    response_body = {
+                        'error': "Hotel Not Found"
+                    }
+                    return make_response(response_body, 404)
+            else:
+                response_body = {
+                    "error": "Only admins can update hotels!"
+                }
+                return make_response(response_body, 401)
+        
+    def delete(self, id):
+        user_id_data = session.get('user_id')
+        user = User.query.filter_by(id=user_id_data).first()
+
+        if(user and user.type == 'admin'):
             hotel = db.session.get(Hotel, id)
 
             if hotel:
-                try:
-                    for attr in request.json:
-                        setattr(hotel, attr, request.json[attr])
-                    
-                    db.session.commit()    
-                    response_body = hotel.to_dict(only=('id', 'name', 'image'))
-                    return make_response(response_body, 200)
-                
-                except:
-                    response_body = {
-                        "error": "Hotel must have a name and image, and the hotel name cannot be the same name as any other hotel!"
-                    }
-                    return make_response(response_body, 400)
-
+                db.session.delete(hotel)
+                db.session.commit()
+                response_body = {}
+                return make_response(response_body, 204)
+            
             else:
                 response_body = {
                     'error': "Hotel Not Found"
                 }
                 return make_response(response_body, 404)
-        
-    def delete(self, id):
-        hotel = db.session.get(Hotel, id)
-
-        if hotel:
-            db.session.delete(hotel)
-            db.session.commit()
-            response_body = {}
-            return make_response(response_body, 204)
-        
         else:
             response_body = {
-                'error': "Hotel Not Found"
+                "error": "Only admins can delete hotels!"
             }
-            return make_response(response_body, 404)
+            return make_response(response_body, 401)
     
 api.add_resource(HotelByID, '/hotels/<int:id>')
 
@@ -280,9 +307,11 @@ class Login(Resource):
 
     def post(self):
         username = request.json.get('username')
+        password = request.json.get('password')
+        
         user = User.query.filter(User.username == username).first()
 
-        if(user):
+        if(user and bcrypt.check_password_hash(user.password_hash, password)):
             session['user_id'] = user.id
             response_body = user.to_dict(rules=('-reviews.hotel.reviews', '-reviews.user', '-password_hash'))
 
@@ -292,7 +321,7 @@ class Login(Resource):
             return make_response(response_body, 201)
         else:
             response_body = {
-                "error": "Invalid username!"
+                "error": "Invalid username or password!"
             }
             return make_response(response_body, 401)
     
@@ -328,6 +357,34 @@ class Logout(Resource):
         return make_response(response_body, 204)
     
 api.add_resource(Logout, '/logout')
+
+class Signup(Resource):
+    def post(self):
+        first_name_data = request.json.get('first_name')
+        last_name_data = request.json.get('last_name')
+        username_data = request.json.get('username')
+        password_data = request.json.get('password')
+        encrypted_password = bcrypt.generate_password_hash(password_data).decode('utf-8')
+
+        try:
+            new_user = User(first_name=first_name_data, last_name=last_name_data, username=username_data, password_hash=encrypted_password, type='customer')
+            db.session.add(new_user)
+            db.session.commit()
+
+            # create a session / cookie to store the id of the newly created user which will be logged in as well
+            session['user_id'] = new_user.id
+            
+            response_body = new_user.to_dict(rules=('-reviews.hotel.reviews', '-reviews.user', '-password_hash'))
+            response_body['hotels'] = [hotel.to_dict(only=('id', 'name', 'image')) for hotel in list(set(new_user.hotels))]
+
+            return make_response(response_body, 201)
+        except:
+            response_body = {
+                "error": "Username might already exist. User type can only be either customer or admin. User's first name and last name cannot be the same, and first name and last name must be at least 3 characters long! User must have a username and password!"
+            }
+            return make_response(response_body, 400)
+
+api.add_resource(Signup, "/signup")
 
 if __name__ == "__main__":
     app.run(port=7777, debug=True)

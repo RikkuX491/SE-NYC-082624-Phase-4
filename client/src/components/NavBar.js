@@ -6,14 +6,23 @@ function NavBar({user, logOutUser}){
             {user !== null ? 
                 <>
                     <NavLink to="/">Home</NavLink>
-                    <NavLink to="/add_hotel">Add Hotel</NavLink>
+                    {user.type === 'admin' ? <NavLink to="/add_hotel">Add Hotel</NavLink> : null}
                     <NavLink to="/reviews">View All Reviews</NavLink>
-                    <NavLink to="/my_reviews">My Reviews</NavLink>
-                    <NavLink to="/add_review">Add Review</NavLink>
+                    {user.type === 'customer' ?
+                    <>
+                        <NavLink to="/my_reviews">My Reviews</NavLink>
+                        <NavLink to="/add_review">Add Review</NavLink>
+                    </>
+                    :
+                    null
+                    }
                     <NavLink onClick={logOutUser} to="/login">Log Out</NavLink>
                 </>
                 :
-                <NavLink to="/login">Login</NavLink>
+                <>
+                    <NavLink to="/login">Login</NavLink>
+                    <NavLink to="/signup">Signup</NavLink>
+                </>
             }
         </nav>
     )

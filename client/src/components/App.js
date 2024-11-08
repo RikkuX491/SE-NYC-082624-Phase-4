@@ -34,10 +34,18 @@ function App(){
                     if(window.location.pathname === '/login'){
                         navigate('/')
                     }
+                    else if(userData.type === 'customer' && window.location.pathname === '/add_hotel'){
+                        navigate('/')
+                    }
+                    else if(userData.type === 'admin' && (window.location.pathname === '/my_reviews' || window.location.pathname === '/add_review')){
+                        navigate('/reviews')
+                    }
                 })
             }
             else if(response.status === 401){
-                navigate('/login')
+                if(window.location.pathname !== '/signup'){
+                    navigate('/login')
+                }
             }
         })
     }, [reviews])
@@ -217,6 +225,28 @@ function App(){
         })
     }
 
+    function signUpUser(signupData){
+        fetch('/signup', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(signupData)
+        })
+        .then(response => {
+            if(response.ok){
+                response.json().then(userData => {
+                    setUser(userData)
+                    navigate('/')
+                })
+            }
+            else{
+                response.json().then(errorData => alert(`Error: ${errorData.error}`))
+            }
+        })
+    }
+
     return (
       <div className="app">
         <NavBar user={user} logOutUser={logOutUser}/>
@@ -234,6 +264,7 @@ function App(){
                 deleteReview: deleteReview,
                 user: user,
                 logInUser: logInUser,
+                signUpUser: signUpUser
             }
         }/>
       </div>
